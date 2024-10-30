@@ -1,0 +1,25 @@
+http:
+  routers:
+    sse:
+      entryPoints:
+        - web
+      rule: PathPrefix(`/sse`)
+      service: sse
+      middlewares:
+      # Comment this line to see SSE working
+        - sse-starter@file
+  services:
+    sse:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: 'http://sse:8080'
+  middlewares:
+    sse-starter:
+      plugin:
+        sablier:
+          group: sse
+          sablierUrl: 'http://sablier:10000'
+          sessionDuration: 45m
+          dynamic:
+            theme: ghost

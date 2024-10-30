@@ -1,0 +1,27 @@
+services:
+  sablier:
+    container_name: sablier
+    image: sablierapp/sablier:1.8.1
+    restart: unless-stopped
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - './sablier.yml:/etc/sablier/sablier.yml'
+  traefik:
+    container_name: traefik
+    image: traefik:v3.0.2
+    restart: unless-stopped
+    command:
+      - --configFile=/etc/traefik/config.yaml
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/rules:/rules
+      - ./traefik/logs:/logs
+      - ./traefik/config.yaml:/etc/traefik/config.yaml
+  sse:
+    container_name: sse
+    build: .
+    labels:
+      - sablier.enable=true
+      - sablier.group=sse

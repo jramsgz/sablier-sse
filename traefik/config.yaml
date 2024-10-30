@@ -1,0 +1,27 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+api:
+  dashboard: true
+providers:
+  docker:
+    exposedByDefault: false
+  file:
+    directory: /rules
+    watch: true
+log:
+  level: WARN
+  filePath: /logs/traefik.log
+accessLog:
+  filePath: /logs/access.log
+  bufferingSize: 50
+entryPoints:
+  web:
+    address: ":80"
+serversTransport:
+  insecureSkipVerify: true
+experimental:
+  plugins:
+    sablier:
+      moduleName: github.com/sablierapp/sablier
+      version: v1.8.1
